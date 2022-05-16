@@ -16,12 +16,64 @@ var_s_bg_bluesky_opacity = 0
 var_s_bg_dusk_opacity = 0
 var_s_bg_moonshine_opacity = 0
 var_s_bg_moonshine_bright_opacity = 0
-var_s_bg_moonshine_bright_x = 0
 
-function on_minute()
+-- lookup table for different day (sunshine) lenghts
+curves_data_table = {}
+curves_data_table['day4'] = {}
+curves_data_table['day4']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9, 10, 11, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 29, 31, 33, 34, 36, 38, 40, 42, 44, 46, 48, 51, 53, 55, 58, 60, 62, 65, 67, 69, 72, 74, 76, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 104, 106, 108, 109, 111, 113, 114, 116, 117, 118, 120, 121, 122, 124, 125, 126, 127, 128, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 140, 141, 142, 143, 144, 145, 145, 146, 147, 148, 148, 149, 150, 150, 151, 152, 152, 153, 154, 154, 155, 155, 156, 156, 157, 157, 158, 158, 159, 159, 160, 160, 161, 161, 162, 162, 163, 163, 163, 164, 164, 164, 165, 165, 166, 166, 166, 167, 167, 167, 168, 168, 168, 168, 169, 169, 169, 169, 170, 170, 170, 170, 171, 171, 171, 171, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173, 173, 174, 174, 174, 174, 174, 174, 174, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['day4']['intersection'] = 70
+var_s_curve_day4_opacity = 0
 
-    var_s_orbx = calc_orb_x()
-    var_s_orby = calc_orb_y()
+curves_data_table['day3'] = {}
+curves_data_table['day3']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8, 9, 9, 10, 10, 11, 12, 12, 13, 14, 15, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 29, 30, 32, 33, 34, 36, 37, 39, 40, 42, 44, 45, 47, 49, 50, 52, 54, 56, 57, 59, 61, 63, 65, 67, 69, 70, 72, 74, 76, 78, 80, 81, 83, 85, 87, 89, 90, 92, 94, 95, 97, 99, 100, 102, 104, 105, 107, 108, 110, 111, 112, 114, 115, 117, 118, 119, 121, 122, 123, 124, 125, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 144, 145, 146, 147, 148, 148, 149, 150, 151, 151, 152, 153, 153, 154, 155, 155, 156, 156, 157, 157, 158, 159, 159, 160, 160, 161, 161, 162, 162, 163, 163, 163, 164, 164, 165, 165, 166, 166, 166, 167, 167, 167, 168, 168, 168, 169, 169, 169, 170, 170, 170, 170, 171, 171, 171, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173, 174, 174, 174, 174, 174, 174, 174, 175, 175, 175, 175, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['day3']['intersection'] = 60
+var_s_curve_day3_opacity = 0
+
+curves_data_table['day2'] = {}
+curves_data_table['day2']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 13, 13, 14, 15, 15, 16, 17, 18, 19, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 40, 41, 42, 44, 45, 46, 48, 49, 51, 52, 53, 55, 56, 58, 59, 61, 62, 64, 65, 67, 68, 70, 72, 73, 75, 76, 78, 79, 81, 82, 84, 86, 87, 89, 90, 92, 93, 95, 96, 98, 99, 101, 102, 103, 105, 106, 108, 109, 110, 112, 113, 114, 116, 117, 118, 119, 121, 122, 123, 124, 125, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 145, 146, 147, 148, 149, 150, 150, 151, 152, 152, 153, 154, 155, 155, 156, 157, 157, 158, 158, 159, 160, 160, 161, 161, 162, 162, 163, 163, 164, 164, 165, 165, 166, 166, 167, 167, 167, 168, 168, 168, 169, 169, 169, 170, 170, 171, 171, 171, 171, 172, 172, 172, 172, 173, 173, 173, 173, 174, 174, 174, 174, 174, 174, 175, 175, 175, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['day2']['intersection'] = 80
+var_s_curve_day2_opacity = 0
+
+curves_data_table['day1'] = {}
+curves_data_table['day1']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7, 8, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 14, 14, 15, 15, 16, 17, 17, 18, 19, 20, 20, 21, 22, 23, 24, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48, 49, 51, 52, 53, 54, 55, 57, 58, 59, 60, 62, 63, 64, 66, 67, 68, 70, 71, 72, 74, 75, 76, 78, 79, 80, 82, 83, 84, 86, 87, 88, 90, 91, 92, 94, 95, 96, 98, 99, 100, 102, 103, 104, 106, 107, 108, 109, 111, 112, 113, 114, 116, 117, 118, 119, 120, 122, 123, 124, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 146, 147, 148, 149, 150, 151, 151, 152, 153, 154, 155, 155, 156, 157, 157, 158, 159, 159, 160, 161, 161, 162, 162, 163, 164, 164, 165, 165, 166, 166, 167, 167, 168, 168, 169, 169, 169, 170, 170, 171, 171, 171, 172, 172, 172, 172, 173, 173, 173, 174, 174, 174, 174, 174, 175, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['day1']['intersection'] = 90
+var_s_curve_day1_opacity = 0
+
+curves_data_table['night1'] = {}
+curves_data_table['night1']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 17, 17, 18, 18, 19, 20, 21, 21, 22, 23, 23, 24, 25, 26, 26, 27, 28, 29, 30, 31, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 64, 65, 66, 67, 68, 69, 70, 72, 73, 74, 75, 76, 77, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 97, 98, 99, 100, 101, 103, 104, 105, 106, 107, 109, 110, 111, 112, 113, 115, 116, 117, 118, 119, 120, 121, 123, 124, 125, 126, 127, 128, 129, 130, 131, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 147, 148, 149, 150, 151, 152, 153, 154, 154, 155, 156, 157, 158, 158, 159, 160, 161, 161, 162, 163, 163, 164, 165, 165, 166, 166, 167, 168, 168, 169, 169, 170, 170, 171, 171, 171, 172, 172, 173, 173, 173, 174, 174, 174, 175, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['night1']['intersection'] = 100
+var_s_curve_night1_opacity = 0
+
+curves_data_table['night2'] = {}
+curves_data_table['night2']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 20, 20, 21, 21, 22, 23, 23, 24, 25, 26, 26, 27, 28, 28, 29, 30, 31, 32, 32, 33, 34, 35, 36, 37, 38, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 57, 58, 59, 60, 61, 62, 64, 65, 66, 67, 68, 70, 71, 72, 73, 75, 76, 77, 79, 80, 81, 82, 84, 85, 86, 88, 89, 90, 92, 93, 95, 96, 97, 99, 100, 101, 103, 104, 105, 107, 108, 109, 111, 112, 114, 115, 116, 118, 119, 120, 122, 123, 124, 125, 127, 128, 129, 131, 132, 133, 134, 136, 137, 138, 139, 140, 141, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 159, 160, 161, 162, 163, 163, 164, 165, 165, 166, 167, 167, 168, 168, 169, 170, 170, 171, 171, 172, 172, 172, 173, 173, 174, 174, 174, 174, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['night2']['intersection'] = 110
+var_s_curve_night2_opacity = 0
+
+curves_data_table['night3'] = {}
+curves_data_table['night3']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 13, 13, 13, 14, 14, 15, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20, 21, 21, 22, 22, 23, 23, 24, 25, 25, 26, 27, 27, 28, 29, 29, 30, 31, 32, 33, 33, 34, 35, 36, 37, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 60, 61, 62, 64, 65, 66, 67, 69, 70, 71, 73, 74, 76, 77, 78, 80, 81, 83, 84, 86, 87, 89, 90, 92, 93, 95, 96, 98, 100, 101, 103, 104, 106, 107, 109, 111, 112, 114, 115, 117, 119, 120, 122, 123, 125, 126, 128, 129, 131, 132, 134, 135, 137, 138, 140, 141, 142, 144, 145, 146, 147, 149, 150, 151, 152, 153, 155, 156, 157, 158, 159, 160, 161, 161, 162, 163, 164, 165, 166, 166, 167, 168, 168, 169, 169, 170, 171, 171, 172, 172, 172, 173, 173, 174, 174, 174, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['night3']['intersection'] = 120
+var_s_curve_night3_opacity = 0
+
+curves_data_table['night4'] = {}
+curves_data_table['night4']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 15, 15, 15, 16, 16, 17, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 25, 25, 26, 26, 27, 28, 28, 29, 30, 30, 31, 32, 33, 33, 34, 35, 36, 36, 37, 38, 39, 40, 41, 42, 43, 43, 44, 45, 46, 47, 48, 49, 51, 52, 53, 54, 55, 56, 57, 59, 60, 61, 62, 64, 65, 66, 68, 69, 71, 72, 74, 75, 77, 78, 80, 81, 83, 85, 86, 88, 90, 92, 93, 95, 97, 99, 101, 103, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 131, 133, 135, 137, 139, 140, 142, 144, 145, 147, 148, 150, 151, 153, 154, 155, 156, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 167, 168, 169, 169, 170, 171, 171, 172, 172, 173, 173, 174, 174, 174, 175, 175, 175, 175, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176, 176}
+curves_data_table['night4']['intersection'] = 130
+var_s_curve_night4_opacity = 0
+
+curve_width_px=458
+curve_image_x_offset = -229 --curve_width_px/2
+curve_image_y_offset =130
+
+
+
+function on_minute(dt)
+
+local curve_name = get_actual_curve_name()
+    local x_pos = calc_orb_x(curve_name)
+    local y_pos = calc_orb_y(curve_name, x_pos)
+
+    var_s_orbx = x_pos+ curve_image_x_offset -- prepare watch coodinates system
+    var_s_orby = (y_pos*-1)+ curve_image_y_offset
+    
     var_s_sun_trans = calc_sun_trans()
 
     sun_color = calc_sun_color()
@@ -35,70 +87,87 @@ function on_minute()
     var_s_bg_dusk_opacity = bg_opacity[3]
 	var_s_bg_moonshine_opacity = bg_opacity[4]
 	var_s_bg_moonshine_bright_opacity = bg_opacity[5]
-var_s_bg_moonshine_bright_x	 = calc_moonshine_bg_bright_x(var_s_orbx)
+    
 
 end
 
-
-function calc_orb_x()
+function calc_orb_x(curve_name)
 
     local now={dtp}
     local sunrise={wsrp}
     local sunset={wssp}
 
-    local width_px=432
-
     local pos_x=0
 
-    if now < sunrise then
-        pos_x =(-width_px/2)+((now/sunrise)*(width_px/4))
-    elseif now >= sunrise and now < sunset then
-        pos_x = (-width_px/4)+(((now-sunrise)/(sunset-sunrise))*(width_px/2))
-    else
-        pos_x = (width_px/4)+(((now-sunset)/(1-sunset))*(width_px/4))
-    end
+       local intersection_px= get_curve_intersection(curve_name)
 
+
+    local distance = 0
+    local daylenght =0
+    -- sunrise
+    if now < sunrise then
+        var_s_dummy = 'sunrise'
+        pos_x = math.floor((intersection_px / sunrise) * now)
+    -- day
+    elseif now >= sunrise and now < sunset then
+        distance = curve_width_px - (2 * intersection_px) 
+        daylenght = sunset - sunrise
+        var_s_dummy = 'day'
+        pos_x = math.floor((distance / daylenght) * (now - sunrise)) + intersection_px
+    -- sunset
+    else
+        var_s_dummy = 'sunset'
+        pos_x = math.floor((intersection_px / (1 - sunset)) * (now - sunset)) + (curve_width_px - intersection_px)
+    end
     return pos_x
-
 end
 
+function calc_orb_y(curve_name, x)
 
-function calc_orb_y()
+    local x_pos = x
+    local y_pos = 0
+    local curve = curve_name
+    local now = {dtp}
 
-    local now={dtp}
-    local sunrise= {wsrp}
-    local sunset= {wssp}
-
-    local pos_y=0
-    local height_px_offset = 38
-    local heigh_px = 80
-
-    local pi = 3.1416
-
-    if now < sunrise then
-        pos_y = math.cos(-pi+((now/sunrise)*(pi/2)))
-    elseif now >= sunrise and now < sunset then
-        pos_y = math.cos(-pi/2+(((now-sunrise)/(sunset-sunrise))*pi))
-    else
-        pos_y = math.cos((pi/2)+(((now-sunset)/(1-sunset))*(pi/2)))
+    -- only the half the the curve is defined to save some memory
+    if (now > 0.5) then
+        x_pos = (curve_width_px - x_pos)
     end
 
-    pos_y = height_px_offset+(pos_y*heigh_px)*-1
-    return pos_y
-
+    y_pos = (curves_data_table[curve]['coordinates'][x_pos])
+    return y_pos
 end
 
-function calc_moonshine_bg_bright_x(x)
+function get_curve_intersection(curve_name)
+    local curve = curve_name
+    return curves_data_table[curve]['intersection']
+end
 
-	local moonphase = {wmp}
+function get_actual_curve_name()
+    local sunrise = {wsrp}
+    local sunset = {wssp}
+    local hour = 0.042
+    local daylenghthours = (sunset-sunrise) / hour
 
-	if(moonphase == 3) then
-		return x+15
-	elseif(moonphase == 5) then
-		return x-15
-	end
-
-	return x
+    if (daylenghthours >= 15) then
+        return 'day4'
+    elseif (daylenghthours >= 14 and daylenghthours < 15) then
+        return 'day3'
+    elseif (daylenghthours >= 13 and daylenghthours < 14) then
+        return 'day2'
+    elseif (daylenghthours >= 12 and daylenghthours < 13) then
+        return 'day1'
+    elseif (daylenghthours >= 11 and daylenghthours < 12) then
+        return 'night1'
+    elseif (daylenghthours >= 10 and daylenghthours < 11) then
+        return 'night2'
+    elseif (daylenghthours >= 9 and daylenghthours < 10) then
+        return 'night3'
+    elseif (daylenghthours < 9) then
+        return 'night4'
+    else
+        return 'horizon'
+    end
 end
 
 function calc_sun_trans()
@@ -108,21 +177,25 @@ function calc_sun_trans()
     local sunset= {wssp}
 	
 	local half_hour = 0.021
+local quater_hour =0.01
 
-    local sunrise = sunrise-half_hour
-    local sunset = sunset+half_hour
 
-    local orbstart = sunrise-half_hour
-    local orbend = sunset+half_hour
+    local sunrisestart = sunrise-half_hour
+    local sunriseend = sunrise+quater_hour
+local sunsetstart =sunset-quater_hour
+local sunsetend =sunset+half_hour
 
-    if (now >= orbstart and now <= sunrise) then
-        return ((now-orbstart)/half_hour)*100
+    if (now >= sunrisestart and now <= sunriseend) then
 
-    elseif (now > sunrise and now < sunset) then
+return (((now-sunrisestart)/(sunriseend-sunrisestart))*100) 
+
+    elseif (now > sunriseend and now < sunsetstart) then
         return 100
 
-    elseif (now >= sunset and now <= orbend) then
-        return 100-((now-sunset)/half_hour)*100
+    elseif (now >= sunsetstart and now <= sunsetend) then
+       return 100-(((now-sunsetstart)/(sunsetend-sunsetstart))*100) 
+
+
     end
     return 0
 end
@@ -133,7 +206,7 @@ function calc_sun_color()
     local now = {dtp}
     local sunrise= {wsrp}
     local sunset= {wssp}
-    local day_sixth = (sunset-sunrise)/6
+    local day_sixth = (sunset-sunrise)/7
 
     local bright_start = sunrise+day_sixth
     local bright_end = sunset-day_sixth
