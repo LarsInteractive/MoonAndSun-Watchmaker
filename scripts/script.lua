@@ -63,6 +63,10 @@ curve_width_px=458
 curve_image_x_offset = -229 --curve_width_px/2
 curve_image_y_offset =130
 
+hour = 0.042
+half_hour = 0.021
+quater_hour = 0.01
+five_min = 0.0035
 
 
 function on_minute(dt)
@@ -146,7 +150,6 @@ end
 function get_actual_curve_name()
     local sunrise = {wsrp}
     local sunset = {wssp}
-    local hour = 0.042
     local daylenghthours = (sunset-sunrise) / hour
 
     if (daylenghthours >= 15) then
@@ -175,10 +178,6 @@ function calc_sun_trans()
     local now = {dtp}
     local sunrise= {wsrp}
     local sunset= {wssp}
-	
-	local half_hour = 0.021
-local quater_hour =0.01
-
 
     local sunrisestart = sunrise-half_hour
     local sunriseend = sunrise+quater_hour
@@ -206,15 +205,15 @@ function calc_sun_color()
     local now = {dtp}
     local sunrise= {wsrp}
     local sunset= {wssp}
-    local day_sixth = (sunset-sunrise)/7
+    local day_segment = (sunset-sunrise)/7
 
-    local bright_start = sunrise+day_sixth
-    local bright_end = sunset-day_sixth
+    local bright_start = sunrise+day_segment
+    local bright_end = sunset-day_segment
 
     local sun_color = {100, 0, -30}
 
     if (now >= sunrise and now < bright_start) then
-        way = ((now-sunrise)/day_sixth)
+        way = ((now-sunrise)/day_segment)
         sun_color[1] =  sun_color[1]-(sun_color[1]*way)
         sun_color[3] =  sun_color[3]-(sun_color[3]*way)
 
@@ -222,7 +221,7 @@ function calc_sun_color()
         sun_color = {0, 0, 0}
 
     elseif (now >= bright_end and now < sunset) then
-        way = ((now-sunset)/day_sixth)
+        way = ((now-sunset)/day_segment)
         sun_color[1] =  sun_color[1]+(sun_color[1]*way)
         sun_color[3] =  sun_color[3]+(sun_color[3]*way)
     end
@@ -232,31 +231,37 @@ function calc_sun_color()
 end
 
 
+--TODO Split method
+--function calc_dawn_bg_opacity()
+--function calc_skyblue_bg_opacity()
+--function calc_dust_bg_opacity()
+--function calc_moonwhite_bg_opacity()
+--function calc_moonblue_bg_opacity()
+
+
 function calc_bg_opacity()
 
     local now = {dtp}
     local sunrise= {wsrp}
     local sunset= {wssp}
-	local moonphase = {wmp}
+    local moonphase = {wmp}
 
     local bg_opacity = {0, 0, 0, 0, 0}
-	
-	local five_min = 0.0035
-	local half_hour = 0.021
-	local day_sixth = (sunset-sunrise)/6
+
+    local day_segment = (sunset-sunrise)/7
 	
 
     local dawn_start = sunrise-half_hour
-	local dawn_climax = sunrise 
-    local dawn_end = sunrise+day_sixth
+    local dawn_climax = sunrise 
+    local dawn_end = sunrise+day_segment
 
     local skyblue_in_start = sunrise
-    local skyblue_in_end = sunrise+day_sixth
-    local skyblue_out_start = sunset-day_sixth
-	local skyblue_out_end = sunset
+    local skyblue_in_end = sunrise+day_segment
+    local skyblue_out_start = sunset-day_segment
+    local skyblue_out_end = sunset
 
-    local dusk_start = sunset-day_sixth
-	local dusk_climax = sunset
+    local dusk_start = sunset-day_segment
+    local dusk_climax = sunset
     local dusk_end = sunset+half_hour
 
     local moonset_start = sunrise-half_hour
