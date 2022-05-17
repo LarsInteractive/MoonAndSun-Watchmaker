@@ -1,4 +1,4 @@
-# This is just a tiny helper, to convert an image with white pixel to an array
+# This is just a tiny helper, to convert an image with white pixel to array values
 # The file is not necessary for operation and can be deleted in the *.watch file
 # and yes, ugly AF but working ;)
 
