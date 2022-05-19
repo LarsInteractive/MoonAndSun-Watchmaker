@@ -63,7 +63,7 @@ curves_data_table['night4']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
 curves_data_table['night4']['intersection'] = 150
 
 curve_width_px = 458
-curve_image_x_offset = -229 --moving image to coodinates system of the watch (0/0 is in the mid)
+curve_image_x_offset = -229 --image is shifted according to the coodinate system of the watch (0/0 is in the mid)
 curve_image_y_offset = 130
 
 hour = 0.042
@@ -71,7 +71,7 @@ half_hour = 0.021
 quater_hour = 0.01
 five_min = 0.0035
 
--- called automatically every second/minute depending on the name
+-- called automatically every second/minute depending on the name e.g. on_second
 function on_minute(dt)
 
     local curve_name = get_actual_curve_name()
@@ -98,7 +98,8 @@ function on_minute(dt)
     var_s_text_initialization = ''
 end
 
--- calculates the appropriate x value as a function of the appropriate day length
+-- calculates the x-value depending on the day length
+-- the intersection point between the curve and the horizon may differ depending on the image, so the value is maintained manually in the lookup table
 function calc_orb_x(curve_name)
 
     local now = {dtp}
@@ -114,12 +115,12 @@ function calc_orb_x(curve_name)
     -- sunrise
     if now < sunrise then
         pos_x = math.floor((intersection_px / sunrise) * now)
-        -- day
+    -- day
     elseif now >= sunrise and now < sunset then
         distance = curve_width_px - (2 * intersection_px)
         daylenght = sunset - sunrise
         pos_x = math.floor((distance / daylenght) * (now - sunrise)) + intersection_px
-        -- sunset
+    -- sunset
     else
         pos_x = math.floor((intersection_px / (1 - sunset)) * (now - sunset)) + (curve_width_px - intersection_px)
     end
@@ -134,7 +135,7 @@ function calc_orb_y(curve_name, x)
     local curve = curve_name
     local now = {dtp}
 
-    -- only the half the the curve is defined to save some memory
+    -- the second half of the curve is the mirrored first half
     if (now > 0.5) then
         x_pos = (curve_width_px - x_pos)
     end
