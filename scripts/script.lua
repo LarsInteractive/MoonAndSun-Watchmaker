@@ -226,15 +226,11 @@ function calc_sun_trans()
     local sunsetend = sunset + half_hour
 
     if (now >= sunrisestart and now <= sunriseend) then
-
         return (((now - sunrisestart) / (sunriseend - sunrisestart)) * 100)
-
     elseif (now > sunriseend and now < sunsetstart) then
         return 100
-
     elseif (now >= sunsetstart and now <= sunsetend) then
         return 100 - (((now - sunsetstart) / (sunsetend - sunsetstart)) * 100)
-
     end
     return 0
 end
