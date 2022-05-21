@@ -1,7 +1,9 @@
 var_s_text_initialization = 'please wait until the next minute' 
 var_s_orbx = 0
 var_s_orby = 0
+
 var_s_sun_trans = 0
+var_s_moon_trans = 0
 
 var_s_sun_color_r = 0
 var_s_sun_color_g = 0
@@ -63,7 +65,7 @@ curves_data_table['night4']['coordinates'] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
 curves_data_table['night4']['intersection'] = 150
 
 curve_width_px = 458
-curve_image_x_offset = -229 --image is shifted according to the coodinate system of the watch (0/0 is in the mid)
+curve_image_x_offset = -229 --moving image to coodinates system of the watch (0/0 is in the mid)
 curve_image_y_offset = 130
 
 hour = 0.042
@@ -71,7 +73,7 @@ half_hour = 0.021
 quater_hour = 0.01
 five_min = 0.0035
 
--- called automatically every second/minute depending on the name e.g. on_second
+-- called automatically every second/minute depending on the name
 function on_minute(dt)
 
     local curve_name = get_actual_curve_name()
@@ -83,7 +85,8 @@ function on_minute(dt)
     var_s_orbx = x_pos + curve_image_x_offset
     var_s_orby = (y_pos * -1) + curve_image_y_offset
 
-    var_s_sun_trans = calc_sun_trans()
+var_s_sun_trans =calc_sun_trans()
+var_s_moon_trans= calc_moon_trans()
     
     sun_color = calc_sun_color()
     var_s_sun_color_r = sun_color[1]
@@ -98,8 +101,7 @@ function on_minute(dt)
     var_s_text_initialization = ''
 end
 
--- calculates the x-value depending on the day length
--- the intersection point between the curve and the horizon may differ depending on the image, so the value is maintained manually in the lookup table
+-- calculates the appropriate x value as a function of the appropriate day length
 function calc_orb_x(curve_name)
 
     local now = {dtp}
@@ -115,12 +117,12 @@ function calc_orb_x(curve_name)
     -- sunrise
     if now < sunrise then
         pos_x = math.floor((intersection_px / sunrise) * now)
-    -- day
+        -- day
     elseif now >= sunrise and now < sunset then
         distance = curve_width_px - (2 * intersection_px)
         daylenght = sunset - sunrise
         pos_x = math.floor((distance / daylenght) * (now - sunrise)) + intersection_px
-    -- sunset
+        -- sunset
     else
         pos_x = math.floor((intersection_px / (1 - sunset)) * (now - sunset)) + (curve_width_px - intersection_px)
     end
@@ -135,7 +137,7 @@ function calc_orb_y(curve_name, x)
     local curve = curve_name
     local now = {dtp}
 
-    -- the second half of the curve is the mirrored first half
+    -- only the half the the curve is defined to save some memory
     if (now > 0.5) then
         x_pos = (curve_width_px - x_pos)
     end
@@ -212,7 +214,7 @@ function get_actual_curve_name()
     end
 end
 
--- fades the sun in and out (the sun always overshines the moon)
+-- fades the sun in and out
 function calc_sun_trans()
 
     local now = {dtp}
@@ -230,6 +232,28 @@ function calc_sun_trans()
         return 100
     elseif (now >= sunsetstart and now <= sunsetend) then
         return 100 - (((now - sunsetstart) / (sunsetend - sunsetstart)) * 100)
+    end
+    return 0
+end
+
+-- fades the moon in and out
+function calc_moon_trans()
+
+    local now = {dtp}
+    local sunrise = {wsrp}
+    local sunset = {wssp}
+
+    local moonrisestart = sunset - half_hour
+    local moonriseend = sunset
+    local moonsetstart = sunrise
+    local moonsetend = sunrise + half_hour
+
+    if (now >= moonrisestart and now <= moonriseend) then
+        return (((now - moonrisestart) / (moonriseend - moonrisestart)) * 100)
+    elseif (now > moonriseend or now < moonsetstart) then
+        return 100
+    elseif (now >= moonsetstart and now <= moonsetend) then
+        return 100 - (((now - moonsetstart) / (moonsetend - moonsetstart)) * 100)
     end
     return 0
 end
