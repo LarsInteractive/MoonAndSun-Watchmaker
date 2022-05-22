@@ -11,14 +11,22 @@ watch the sun and moon make their paths in the sky
 
 ### Features
 Elegant design
+
 Very power efficient due to a lot of black
+
 Calculation of the display only necessary once a minute
+
 Programming very easy to customize as source code was prepared for editing on smartphone in Watchmaker. (Unfortunately the code is a bit bloated because of this).
 
+
 Animated sun
+
 Realistic moon(phase)
+
 Colorful rendering of the sky especially at sunrise and sunset
+
 Daylengths representation
+
 
 Helper (Python) to read own images of curves
 
