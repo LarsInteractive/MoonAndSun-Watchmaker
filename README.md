@@ -10,30 +10,33 @@ watch the sun and moon make their paths in the sky
 ![Preview](https://github.com/LarsInteractive/MoonAndSun-Watchmaker/blob/master/preview.jpg)
 
 ### Features
-Elegant design
+* Design
 
-Very power efficient due to a lot of black
+  * Elegant design
+  
+  * Animated sun
+  
+  * Realistic moon(phase)
+  
+  * Colorful rendering of the sky especially at sunrise and sunset
+  
+  * Daylengths representation
+  
+* Technical
 
-Calculation of the display only necessary once a minute
+  * Very power efficient due to a lot of black
+  
+  * Calculation of the display only necessary once a minute
+  
+  * Programming very easy to customize as source code was prepared for editing on smartphone in Watchmaker. (Unfortunately the code is a bit bloated because of this).
 
-Programming very easy to customize as source code was prepared for editing on smartphone in Watchmaker. (Unfortunately the code is a bit bloated because of this).
-
-
-Animated sun
-
-Realistic moon(phase)
-
-Colorful rendering of the sky especially at sunrise and sunset
-
-Daylengths representation
-
-
-Helper (Python) to read own images of curves
+  * Helper onboard (Python) to read own curves image files and add them to lookup table
 
 
 # Tiny hint section
-The content of font folder is removed due copyright concerns
 
-The script.lua in scripts is renamed to script.txt. Otherwise the script is not recognized by various applications
+* The content of font folder is removed due copyright concerns
 
-A watch-file is simply a zip-file with a certain structure
+* The script.lua in scripts is renamed to script.txt. Otherwise the script is not recognized by various applications
+
+* A watch-file is simply a zip-file with a certain structure
