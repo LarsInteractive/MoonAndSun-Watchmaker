@@ -24,7 +24,7 @@ watch the sun and moon make their paths in the sky
   
 * Technical
 
-  * Very power efficient due to a lot of black
+  * Very eneegy efficient due to a lot of black backgrolunds
   
   * Calculation of the display only necessary once a minute
   
